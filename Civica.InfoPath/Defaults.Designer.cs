@@ -103,6 +103,17 @@ namespace Civica.InfoPath {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ul {
+        ///    background-color: red;
+        ///}.
+        /// </summary>
+        internal static string styles {
+            get {
+                return ResourceManager.GetString("styles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;?mso-infoPathSolution name=&quot;urn:schemas-microsoft-com:office:infopath:Form1:-myXSD-2017-07-27T23-30-35&quot; href=&quot;manifest.xsf&quot; solutionVersion=&quot;1.0.0.1&quot; productVersion=&quot;15.0.0&quot; PIVersion=&quot;1.0.0.0&quot; ?&gt;
         ///&lt;?mso-application progid=&quot;InfoPath.Document&quot; versionProgid=&quot;InfoPath.Document.3&quot;?&gt;

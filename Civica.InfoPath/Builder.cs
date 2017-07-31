@@ -10,6 +10,8 @@ namespace Civica.InfoPath
     public class Builder
     {
         private ICabService CabService;
+
+        private XmlDocument manifest;
         public Builder(ICabService cabService)
         {
             this.CabService = cabService;
@@ -18,28 +20,54 @@ namespace Civica.InfoPath
             this.Form = cabService.Create();
 
             // Add default xmls
-            addResource("myschema.xsd",Defaults.myschema);
-            addResource("sampledata.xml", Defaults.sampledata);
-            addResource("template.xml", Defaults.template);
-            addResource("view1.xsl", Defaults.view1);
-            addResource("manifest.xsf", Defaults.manifest);
+            AddXmlResource("myschema.xsd",Defaults.myschema);
+            AddXmlResource("sampledata.xml", Defaults.sampledata);
+            AddXmlResource("template.xml", Defaults.template);
+            AddXmlResource("view1.xsl", Defaults.view1);
+            manifest = AddXmlResource("manifest.xsf", Defaults.manifest);
+            AddResource("styles.css", Defaults.styles);
         }
 
         public Cab Form { get; private set; }
 
-        private void addResource(string resourceName, byte[] resourceBytes)
+        private XmlDocument AddXmlResource(string resourceName, byte[] resourceBytes)
         {
             var resourceXml = new XmlDocument();
             resourceXml.LoadXml(UTF8Encoding.UTF8.GetString(resourceBytes));
-            this.Form.XmlDocs[resourceName] = resourceXml;
+            this.Form.Add(resourceName, resourceXml);
+            return resourceXml;
         }
 
-        private void addResource(string resourceName, string resource)
+        private void AddXmlResource(string resourceName, string resource)
         {
             var resourceXml = new XmlDocument();
             resourceXml.LoadXml(resource);
-            this.Form.XmlDocs[resourceName] = resourceXml;
+            this.Form.Add(resourceName, resourceXml);
         }
 
+        public void AddResource(string resourceName, string resource)
+        {
+            this.Form.Add(resourceName, UTF8Encoding.UTF8.GetBytes(resource));
+
+            // Add the reference to the file
+            var nsmgr = new XmlNamespaceManager(this.Manifest.NameTable);
+            nsmgr.AddNamespace("xsf", "http://schemas.microsoft.com/office/infopath/2003/solutionDefinition");
+
+            var file = this.Manifest.CreateElement("xsf", "file", "http://schemas.microsoft.com/office/infopath/2003/solutionDefinition");
+            var name = this.Manifest.CreateAttribute("name");
+            name.Value = resourceName;
+            file.Attributes.Append(name);
+            this.Manifest.SelectSingleNode("/xsf:xDocumentClass/xsf:package/xsf:files", nsmgr)
+                .AppendChild(file);
+
+        }
+
+        public XmlDocument Manifest
+        {
+            get
+            {
+                return this.manifest;
+            }
+        }
     }
 }

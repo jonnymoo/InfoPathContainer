@@ -33,6 +33,11 @@ namespace ExampleCabBuilder
                 }
             }
 
+            foreach(var file in cab.Files)
+            {
+                File.WriteAllBytes(tempDirectory + "\\" + file.Key, file.Value);
+            }
+
             cabInfo.Pack(tempDirectory);
 
             Directory.Delete(tempDirectory, true);

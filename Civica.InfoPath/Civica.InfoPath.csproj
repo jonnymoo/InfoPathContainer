@@ -71,5 +71,8 @@
   <ItemGroup>
     <None Include="Resources\view1.xsl" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\styles.css" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

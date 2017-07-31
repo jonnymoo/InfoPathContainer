@@ -1,0 +1,12 @@
+ul {
+    list-style: none;
+}
+
+ul label {
+    display: block;
+}
+
+ul input {
+    display: block;
+    border: 2px solid red;
+}
